@@ -1,11 +1,24 @@
 package ru.javawebinar.topjava;
 
+import java.io.Serializable;
+
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
-public class AuthorizedUser {
+public class AuthorizedUser implements Serializable{
 
-    public static int id() {
-        return 1;
+    private int id;
+
+//    public int id() {
+//        return 2;
+//    }
+
+
+    public AuthorizedUser(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public static int getCaloriesPerDay() {
