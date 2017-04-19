@@ -138,6 +138,11 @@
             <artifactId>javax.el-api</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 
         <!--Web-->
         <dependency>
