@@ -1,26 +1,19 @@
-var ajaxUrl = 'ajax/admin/users/';
-var datatableApi;
+var ajaxMealUrl = 'ajax/meals/';
+var datatableApiMeal;
 
-// $(document).ready(function () {
 $(function () {
-    datatableApi = $('#datatable').DataTable({
+    datatableApiMeal = $('#datatable').DataTable({
         "paging": false,
         "info": true,
         "columns": [
             {
-                "data": "name"
+                "data": "dateTime"
             },
             {
-                "data": "email"
+                "data": "description"
             },
             {
-                "data": "roles"
-            },
-            {
-                "data": "enabled"
-            },
-            {
-                "data": "registered"
+                "data": "calories"
             },
             {
                 "defaultContent": "Edit",
@@ -41,23 +34,9 @@ $(function () {
     makeEditable();
 });
 
-$(document).ready(function (){
-    $(".box").on("change", changeBox());
-});
-
-function changeBox() {
-    // if($(this).prop('checked')){
-    //    $.get(ajaxUrl + 'change?id=' + $(this).attr("id") + '&enable=true');
-    // }else{
-    //     $.get(ajaxUrl + 'change?id=' + $(this).attr("id") + '&enable=false');
-    // }
-
-    alert('Hello');
-}
-
 function deleteRow(id) {
     $.ajax({
-        url: ajaxUrl + id,
+        url: ajaxMealUrl + id,
         type: 'DELETE',
         success: function () {
             updateTable();
@@ -67,12 +46,14 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.clear();
+    var form = $('#filter');
+    form.clear();
+    $.get(ajaxMealUrl, function (data) {
+        datatableApiMeal.clear();
         $.each(data, function (key, item) {
-            datatableApi.row.add(item);
+            datatableApiMeal.row.add(item);
         });
-        datatableApi.draw();
+        datatableApiMeal.draw();
     });
 }
 
@@ -80,12 +61,31 @@ function save() {
     var form = $('#detailsForm');
     $.ajax({
         type: "POST",
-        url: ajaxUrl,
+        url: ajaxMealUrl,
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable();
+            // updateTable();
+            between();
             successNoty('Saved');
         }
     });
+}
+
+function between() {
+    var form = $('#filter');
+    $.ajax({
+        type: "POST",
+        url: ajaxMealUrl + 'filter',
+        data: form.serialize(),
+        success: function (data) {
+          datatableApiMeal.clear();
+            $.each(data, function (key, item) {
+                datatableApiMeal.row.add(item);
+            });
+            datatableApiMeal.draw();
+        }
+    })
+
+
 }
